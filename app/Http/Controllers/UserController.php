@@ -13,7 +13,7 @@ class UserController extends Controller
     public function register(Request $request) 
     {
         try {
-            $isAny = User::where('username', $request)->first();
+            $isAny = User::where('username', $request->username)->first();
 
             if ($isAny) {
                 return response()->json([
