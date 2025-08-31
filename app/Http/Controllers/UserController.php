@@ -25,6 +25,7 @@ class UserController extends Controller
             $user->username = $request->username;
             $user->fullname = $request->fullname;
             $user->password = $request->password;
+            $user->role = "user";
             $user->save();
 
             return response()->json([
@@ -64,9 +65,15 @@ class UserController extends Controller
 
     public function me() 
     {
-        $user = Auth::user();
-        return response()->json([
-            "data" => $user,
-        ]);
+        try {
+            $user = Auth::user();
+            return response()->json([
+                "data" => $user,
+            ]);
+        } catch (\Exception $err) {
+            return response()->json([
+                "message" => $err->getMessage()
+            ], 422);
+        }
     }
 }

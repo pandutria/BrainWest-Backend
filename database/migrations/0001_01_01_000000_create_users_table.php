@@ -16,11 +16,9 @@ return new class extends Migration
             $table->string('fullname');
             $table->string('username')->unique();
             $table->string('password');
-            $table->rememberToken();
+            $table->enum("role", ["admin", "user"]);
             $table->timestamps();
         });
-
-
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
