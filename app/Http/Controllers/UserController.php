@@ -17,7 +17,7 @@ class UserController extends Controller
 
             if ($isAny) {
                 return response()->json([
-                    'message' => 'Username already in use'
+                    'message' => 'Nama Pengguna Sudah Digunakan!'
                 ], 409);
             }
 
