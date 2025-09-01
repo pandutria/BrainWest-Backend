@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\EducationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -13,9 +14,9 @@ Route::middleware("auth")->group(function() {
     Route::get("/me", [UserController::class, 'me']);
 
     // Education
-    Route::get("/article", [ArticleController::class, "index"]);
-    Route::post("/article", [ArticleController::class, "store"]);
-    Route::get("/article/{id}", [ArticleController::class, "show"]);
-    Route::put("/article/{id}", [ArticleController::class, "update"]);
-    Route::delete("/article/{id}", [ArticleController::class, "destroy"]);
+    Route::get("/education", [EducationController::class, "index"]);
+    Route::post("/education", [EducationController::class, "store"]);
+    Route::get("/education/{id}", [EducationController::class, "show"]);
+    Route::put("/education/{id}", [EducationController::class, "update"]);
+    Route::delete("/education/{id}", [EducationController::class, "destroy"]);
 });

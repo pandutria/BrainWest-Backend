@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
+use App\Models\Education;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Exception;
 use Illuminate\Http\Request;
 
-class ArticleController extends Controller
+class EducationController extends Controller
 {
     public function index()
     {
-        $data = Article::all();
+        $data = Education::all();
         return response()->json([
             "data" => $data
         ]);
@@ -25,7 +25,7 @@ class ArticleController extends Controller
                 ["folder" => "Brainwest/article"]
             );
 
-            $data = new Article();
+            $data = new Education();
             $data->title = $request->title;
             $data->thumbnail = $upload['secure_url'];
             $data->text = $request->text;
@@ -47,7 +47,7 @@ class ArticleController extends Controller
 
     public function show(string $id)
     {
-        $data = Article::find($id);
+        $data = Education::find($id);
         return response()->json([
             "data" => $data
         ]);
@@ -56,7 +56,7 @@ class ArticleController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $data = Article::find($id);
+            $data = Education::find($id);
             if (!$data) {
                 return response()->json([
                     "message" => "Data Tidak Ditemukan!"
@@ -99,7 +99,7 @@ class ArticleController extends Controller
     public function destroy($id)
     {
         try {
-            $data = Article::find($id);
+            $data = Education::find($id);
             if (!$data) {
                 return response()->json([
                     "message" => "Data Tidak Ditemukan!"
