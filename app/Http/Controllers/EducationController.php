@@ -13,6 +13,7 @@ class EducationController extends Controller
     {
         $data = Education::all();
         return response()->json([
+            "message" => "Data Berhasil Diambil!",
             "data" => $data
         ]);
     }
@@ -49,6 +50,7 @@ class EducationController extends Controller
     {
         $data = Education::find($id);
         return response()->json([
+            "message" => "Data Berhasil Diambil!",
             "data" => $data
         ]);
     }
