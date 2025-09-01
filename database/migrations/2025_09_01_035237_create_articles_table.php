@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("title");
             $table->string("thumbnail");
-            $table->string("desc");
+            $table->text("desc");
             $table->text("text");
             $table->text("link");
             $table->string("category");
