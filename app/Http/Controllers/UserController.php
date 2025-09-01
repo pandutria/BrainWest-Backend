@@ -18,7 +18,7 @@ class UserController extends Controller
             if ($isAny) {
                 return response()->json([
                     'message' => 'Nama Pengguna Sudah Digunakan!'
-                ], 409);
+                ], 403);
             }
 
             $user = new User();
@@ -70,7 +70,7 @@ class UserController extends Controller
             return response()->json([
                 "data" => $user,
             ]);
-        } catch (\Exception $err) {
+        } catch (Exception $err) {
             return response()->json([
                 "message" => $err->getMessage()
             ], 422);
