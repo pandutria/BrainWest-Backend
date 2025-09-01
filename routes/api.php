@@ -13,8 +13,7 @@ Route::middleware("auth")->group(function() {
     Route::get("/me", [UserController::class, 'me']);
 
     // Education
-    Route::get("/article", [ArticleController::class, "getArticle"]);  // Article
-    Route::get("/article/video", [ArticleController::class, "getVideo"]); // Video
+    Route::get("/article", [ArticleController::class, "index"]);
     Route::post("/article", [ArticleController::class, "store"]);
     Route::get("/article/{id}", [ArticleController::class, "show"]);
     Route::put("/article/{id}", [ArticleController::class, "update"]);

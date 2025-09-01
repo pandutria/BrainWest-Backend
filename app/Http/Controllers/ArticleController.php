@@ -9,17 +9,9 @@ use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    public function getArticle()
+    public function index()
     {
-        $data = Article::where("category", "article")->get();
-        return response()->json([
-            "data" => $data
-        ]);
-    }
-
-    public function getVideo()
-    {
-        $data = Article::where("category", "video")->get();
+        $data = Article::all();
         return response()->json([
             "data" => $data
         ]);
