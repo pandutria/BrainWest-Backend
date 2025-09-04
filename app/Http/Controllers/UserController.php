@@ -68,7 +68,7 @@ class UserController extends Controller
         try {
             $user = Auth::user();
             return response()->json([
-                "data" => $user,
+                "data" => $user
             ]);
         } catch (Exception $err) {
             return response()->json([

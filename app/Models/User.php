@@ -44,4 +44,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function eventTransaction()
+    {
+        return $this->hasMany(EventTransaction::class, 'user_id');
+    }
 }
