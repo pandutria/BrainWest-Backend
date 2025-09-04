@@ -43,7 +43,7 @@ class EventController extends Controller
         try {
             $upload = Cloudinary::uploadApi()->upload(
                 $request->file("image")->getRealPath(),
-                ["folder" => "Brainwest/evemt"]
+                ["folder" => "Brainwest/event"]
             );
 
             $data = new Event();
