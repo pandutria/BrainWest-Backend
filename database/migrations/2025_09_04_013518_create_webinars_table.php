@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string("timestamp");
             $table->string("address");
             $table->bigInteger("price");
+            $table->string("city");
             $table->timestamps();
         });
     }

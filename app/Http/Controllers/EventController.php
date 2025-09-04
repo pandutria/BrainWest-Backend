@@ -54,6 +54,7 @@ class EventController extends Controller
             $data->date = $request->date;
             $data->address = $request->address;
             $data->price = $request->price;
+            $data->city = $request->city;
             $data->save();
 
             return response()->json([
@@ -135,6 +136,7 @@ class EventController extends Controller
             $data->date = $request->date ?? $data->date;
             $data->address = $request->address ?? $data->address;
             $data->price = $request->price ?? $data->price;
+            $data->city = $request->city ?? $data->price;
             $data->save();
 
             return response()->json([

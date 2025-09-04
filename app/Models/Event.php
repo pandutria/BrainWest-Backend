@@ -18,6 +18,7 @@ class Event extends Model
         "date",
         "timestamp",
         "address",
-        "price"
+        "price",
+        "city"
     ];
 }
