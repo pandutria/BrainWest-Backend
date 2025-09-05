@@ -53,15 +53,38 @@ class EventTransactionController extends Controller
     {
         try {
             $user = Auth::user();
-            $data = new EventTransaction();
-            $data->user_id = $user->id;
-            $data->event_id = $request->event_id;
-            $data->save();
+
+            $transaction = new EventTransaction();
+            $transaction->user_id = $user->id;
+            $transaction->event_id = $request->event_id;
+            $transaction->save();
+
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
+            \Midtrans\Config::$isProduction = config('midtrans.is_production');
+            \Midtrans\Config::$isSanitized = config('midtrans.is_sanitized');
+            \Midtrans\Config::$is3ds = config('midtrans.is_3ds');
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => 'TRX-' . $transaction->id . '-' . time(),
+                    'gross_amount' => 50000,
+                ],
+                'customer_details' => [
+                    'first_name' => $user->name,
+                    'email' => $user->email,
+                ],
+            ];
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
 
             return response()->json([
-                "data" => $data, 
-                "message" => "Transaksi Berhasil!"
+                'data' => [
+                    "transaction" => $transaction,
+                    "snap_token" => $snapToken
+                ],
+                'message' => 'Transaksi berhasil dibuat!',
             ], 201);
+
         } catch (Exception $err) {
             return response()->json([
                 "message" => $err->getMessage()
