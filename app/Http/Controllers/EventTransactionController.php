@@ -79,7 +79,7 @@ class EventTransactionController extends Controller
 
             return response()->json([
                 'data' => [
-                    "transaction" => $transaction,
+                    "event_transaction" => $transaction,
                     "snap_token" => $snapToken
                 ],
                 'message' => 'Transaksi berhasil dibuat!',
