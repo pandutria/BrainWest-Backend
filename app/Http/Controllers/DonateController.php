@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
+use App\Models\Donate;
+use Carbon\Carbon;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Exception;
 use Illuminate\Http\Request;
 
-class EventController extends Controller
+class DonateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +16,28 @@ class EventController extends Controller
     public function index()
     {
         try {
-            $data = Event::all();
+            $data = Donate::all();
             return response()->json([
                 "message" => "Data Berhasil Diambil!",
-                "data" => $data
+                "data" => $data->map(function($item) {
+                    $deadline = Carbon::parse($item->date)->startOfDay();
+                    $remainingDays = Carbon::now()->startOfDay()->diffInDays($deadline, false);
+                    $user_donate = $item->user_donate;
+
+                    return [
+                        "id" => $item->id,
+                        "title" => $item->title,
+                        "image" => $item->image,
+                        "desc" => $item->desc,
+                        "institution" => $item->institution,
+                        "image_institution" => $item->image_institution,
+                        "date" => $item->date,
+                        "target" => $item->target,
+                        "deadline" => $remainingDays . " Hari",
+                        "remaining_donate" => $item->target - $user_donate->pluck("total_donate")->sum(),
+                        "user_donate" => $user_donate
+                    ];
+                })->toArray(),
             ]);
         } catch (Exception $err) {
             return response()->json([
@@ -41,24 +60,28 @@ class EventController extends Controller
     public function store(Request $request)
     {
         try {
+            $data = new Donate();
             $upload = Cloudinary::uploadApi()->upload(
                 $request->file("image")->getRealPath(),
-                ["folder" => "Brainwest/event"]
+                ["folder" => "Brainwest/donate"]
             );
 
-            $data = new Event();
+            $uploadInstitution = Cloudinary::uploadApi()->upload(
+                $request->file("image_institution")->getRealPath(),
+                ["folder" => "Brainwest/donate/institution"]
+            );
+
             $data->title = $request->title;
             $data->image = $upload["secure_url"];
             $data->desc = $request->desc;
-            $data->timestamp = $request->timestamp;
             $data->date = $request->date;
-            $data->address = $request->address;
-            $data->price = $request->price;
-            $data->city = $request->city;
+            $data->institution = $request->institution;
+            $data->image_institution = $uploadInstitution["secure_url"];
+            $data->target = $request->target;
             $data->save();
 
             return response()->json([
-                "message" => "Data Berhasil Ditambah!",
+                "message" => "Tambah Data Berhasil",
                 "data" => $data
             ], 201);
         } catch (Exception $err) {
@@ -74,17 +97,32 @@ class EventController extends Controller
     public function show(string $id)
     {
         try {
-            $data = Event::find($id);
+            $data = Donate::find($id);
             if (!$data) {
                 return response()->json([
                     "message" => "Data Tidak Ditemukan!",
-                    "data" => $data
-                ], 404);
+                ], 404);    
             }
+
+            $deadline = Carbon::parse($data->date);
+            $remainingDays = Carbon::now()->startOfDay()->diffInDays($deadline, false);
+            $user_donate = $data->user_donate;
 
             return response()->json([
                 "message" => "Data Berhasil Diambil!",
-                "data" => $data
+                "data" => [
+                    "id" => $data->id,
+                    "title" => $data->title,
+                    "image" => $data->image,
+                    "desc" => $data->desc,
+                    "institution" => $data->institution,
+                    "image_institution" => $data->image_institution,
+                    "date" => $data->date,
+                    "target" => $data->target,
+                    "deadline" => $remainingDays . " Hari",
+                    "remaining_donate" => $data->target - $user_donate->pluck("total_donate")->sum(),
+                    "user_donate" => $user_donate
+                ]
             ]);
         } catch (Exception $err) {
             return response()->json([
@@ -107,37 +145,43 @@ class EventController extends Controller
     public function update(Request $request, string $id)
     {
         try {
-            $data = Event::find($id);
+            $data = Donate::find($id);
             if (!$data) {
                 return response()->json([
                     "message" => "Data Tidak Ditemukan!",
-                    "data" => $data
-                ], 404);
+                ], 404);    
             }
-
+            
             if ($request->hasFile('image')) {
                 $upload = Cloudinary::uploadApi()->upload(
                     $request->file("image")->getRealPath(),
-                    ["folder" => "Brainwest/event"]
+                    ["folder" => "Brainwest/donate"]
                 );
 
-                $data->thumbnail = $upload['secure_url'];
+                $data->image = $upload['secure_url'];
             }
 
+            if ($request->hasFile('image_institution')) {
+                $uploadInstitution = Cloudinary::uploadApi()->upload(
+                    $request->file("image_institution")->getRealPath(),
+                    ["folder" => "Brainwest/donate/institution"]
+                );
+
+                $data->image_institution = $uploadInstitution['secure_url'];
+            }
+
+
             $data->title = $request->title ?? $data->title;
-            $data->image = $upload["secure_url"] ?? $data->image;
             $data->desc = $request->desc ?? $data->desc;
-            $data->timestamp = $request->timestamp ?? $data->timestamp;
             $data->date = $request->date ?? $data->date;
-            $data->address = $request->address ?? $data->address;
-            $data->price = $request->price ?? $data->price;
-            $data->city = $request->city ?? $data->price;
+            $data->institution = $request->institution ?? $data->institution;
+            $data->target = $request->target ?? $data->target;
             $data->save();
 
             return response()->json([
                 "message" => "Data Berhasil Diubah!",
                 "data" => $data
-            ]);
+            ], 201);
         } catch (Exception $err) {
             return response()->json([
                 "message" => $err->getMessage()
@@ -151,23 +195,21 @@ class EventController extends Controller
     public function destroy(string $id)
     {
         try {
-            $data = Event::find($id);
+            $data = Donate::find($id);
             if (!$data) {
                 return response()->json([
                     "message" => "Data Tidak Ditemukan!",
-                    "data" => $data
-                ], 404);
+                ], 404);    
             }
 
             $data->delete();
             return response()->json([
                 "message" => "Data Berhasil Dihapus!",
-                "data" => $data
-            ]);
+            ], 201);
         } catch (Exception $err) {
             return response()->json([
                 "message" => $err->getMessage()
             ], 422);
-        }   
+        }
     }
 }

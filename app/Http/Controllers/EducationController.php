@@ -66,17 +66,12 @@ class EducationController extends Controller
             }
 
             if ($request->hasFile('thumbnail')) {
-                if ($data->public_id) {
-                    Cloudinary::uploadApi()->destroy($data->public_id);
-                }
-
                 $upload = Cloudinary::uploadApi()->upload(
                     $request->file("thumbnail")->getRealPath(),
                     ["folder" => "Brainwest/article"]
                 );
 
                 $data->thumbnail = $upload['secure_url'];
-                $data->public_id = $upload['public_id'];
             }
 
             $data->title = $request->title ?? $data->title;
