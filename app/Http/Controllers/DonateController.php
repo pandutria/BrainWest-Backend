@@ -34,7 +34,7 @@ class DonateController extends Controller
                         "date" => $item->date,
                         "target" => $item->target,
                         "deadline" => $remainingDays . " Hari",
-                        "remaining_donate" => $item->target - $user_donate->pluck("total_donate")->sum(),
+                        "current_donate" => $user_donate->pluck("total_donate")->sum(),
                         "user_donate" => $user_donate
                     ];
                 })->toArray(),
@@ -120,7 +120,7 @@ class DonateController extends Controller
                     "date" => $data->date,
                     "target" => $data->target,
                     "deadline" => $remainingDays . " Hari",
-                    "remaining_donate" => $data->target - $user_donate->pluck("total_donate")->sum(),
+                    "current_donate" => $user_donate->pluck("total_donate")->sum(),
                     "user_donate" => $user_donate
                 ]
             ]);
