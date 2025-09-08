@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("image");
             $table->text("desc");
             $table->string("date");
-            $table->string("timestamp");
+            $table->date("timestamp");
             $table->string("address");
             $table->bigInteger("price");
             $table->string("city");

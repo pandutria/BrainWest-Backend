@@ -31,7 +31,7 @@ class DonateTransactionController extends Controller
     {
         try {
             $user = Auth::user();
-            $data = DonateTransaction::with(["user", "donate"])->where("user_id", $user->id)->get();
+            $data = DonateTransaction::with(["user", "donate"])->where("user_id", $user->id)->orderBy("created_at", "DESC")->get();
             return response()->json([
                 "message" => "Data Berhasil Diambil!",
                 "data" => $data

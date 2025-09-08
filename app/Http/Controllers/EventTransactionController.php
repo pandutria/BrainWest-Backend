@@ -34,7 +34,7 @@ class EventTransactionController extends Controller
     {
         try {
             $user = Auth::user();
-            $data = EventTransaction::with(["user", "event"])->where("user_id", $user->id)->get();
+            $data = EventTransaction::with(["user", "event"])->where("user_id", $user->id)->orderBy("created_at", "DESC")->get();
             return response()->json([
                 "data" => $data, 
                 "message" => "Data Berhasil Diambil!"

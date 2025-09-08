@@ -16,8 +16,8 @@ return new class extends Migration
             $table->bigInteger("user_id")->unsigned();
             $table->bigInteger("event_id")->unsigned();
             
-            $table->foreign("user_id")->references("id")->on("users")->onDelete("RESTRICT");
-            $table->foreign("event_id")->references("id")->on("events")->onDelete("RESTRICT");
+            $table->foreign("user_id")->references("id")->on("users")->onDelete("CASCADE");
+            $table->foreign("event_id")->references("id")->on("events")->onDelete("CASCADE");
             $table->timestamps();
         });
     }
