@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ConsultationChatHistoriesController;
+use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DonateController;
 use App\Http\Controllers\DonateTransactionController;
 use App\Http\Controllers\EducationController;
@@ -19,10 +21,20 @@ Route::middleware("auth")->group(function() {
     Route::get("/me", [UserController::class, 'me']); // Me
     Route::get("/me/event/transaction", [EventTransactionController::class, 'meTransaction']); // Me Event Transaction
     Route::get("/me/donate/transaction", [DonateTransactionController::class, 'meTransaction']); // Me Donate Transaction
-    
-    Route::resource("/education", EducationController::class); // Education        
+
+    Route::resource("/education", EducationController::class); // Education
     Route::resource("/events", EventController::class); // Event
     Route::resource("/event/transaction", EventTransactionController::class); // Event Transaction
     Route::resource("/donates", DonateController::class); // Donate
     Route::resource("/donate/transaction", DonateTransactionController::class); // Donate Transaction
+
+    //Consultation
+    Route::post('/consultation', [ConsultationChatHistoriesController::class, 'sendMessage']);
+    Route::get('/consultation/history', [ConsultationChatHistoriesController::class, 'getHistory']);
 });
+
+//Doctor
+Route::get('/doctor', [DoctorController::class, 'index']);
+Route::get('/doctor/{id}', [DoctorController::class, 'show']);
+Route::post('/doctor', [DoctorController::class, 'store']);
+Route::delete('/doctor/{id}', [DoctorController::class, 'destroy']);

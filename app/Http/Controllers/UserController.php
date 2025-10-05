@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function register(Request $request) 
+    public function register(Request $request)
     {
-        try {
+         try {
             $isAny = User::where('username', $request->username)->first();
 
             if ($isAny) {
@@ -40,7 +40,7 @@ class UserController extends Controller
         }
     }
 
-    public function login(Request $request) 
+    public function login(Request $request)
     {
         try {
             $user = User::where("username", $request->username)->first();
@@ -49,7 +49,7 @@ class UserController extends Controller
                     "message" => "Nama atau Kata Sandi Salah!"
                 ], 401);
             }
-            
+
             $token = $user->createToken("access_token")->plainTextToken;
             return response()->json([
                 "message" => "Masuk Berhasil!",
@@ -63,7 +63,7 @@ class UserController extends Controller
         }
     }
 
-    public function me() 
+    public function me()
     {
         try {
             $user = Auth::user();
