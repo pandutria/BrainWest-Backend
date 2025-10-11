@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Doctor;
+use App\Models\Rehabilitation;
 use Exception;
 use Illuminate\Http\Request;
 
-
-class DoctorController extends Controller
+class RehabilitationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +15,11 @@ class DoctorController extends Controller
     {
         //
         try {
-            $data = Doctor::with('user')->get();
             return response()->json([
-                'message' => 'Get data successfully!',
-                'data' => $data
+                'message' => 'Get data success',
+                'data' => Rehabilitation::all()
             ], 200);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
             ], 500);
@@ -42,20 +40,16 @@ class DoctorController extends Controller
     public function store(Request $request)
     {
         //
-         try {
-            $data = new Doctor();
-            $data->user_id = $request->user_id;
-            $data->hospital = $request->hospital;
-            $data->specialization = $request->specialization;
-            $data->image = $request->image;
-            $data->rating = $request->rating;
-            $data->experience = $request->experience;
+        try {
+            $data = new Rehabilitation();
+            $data->age = $request->age;
+            $data->gender = $request->gender;
+            $data->medical_status = $request->medical_status;
+            $data->time_of_diagnose = $request->time_of_diagnose;
             $data->save();
 
-            $data = Doctor::with('user')->find($data->id);
-
             return response()->json([
-                'message' => 'Create data successfully!',
+                'message' => 'Create data success',
                 'data' => $data
             ], 201);
         } catch (Exception $e) {
@@ -68,26 +62,15 @@ class DoctorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Rehabilitation $rehabilitation)
     {
         //
-         try {
-            $data = Doctor::with('user')->find($id);
-            return response()->json([
-                'message' => 'Get data successfully!',
-                'data' => $data
-            ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
-        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Doctor $doctor)
+    public function edit(Rehabilitation $rehabilitation)
     {
         //
     }
@@ -95,7 +78,7 @@ class DoctorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Doctor $doctor)
+    public function update(Request $request, Rehabilitation $rehabilitation)
     {
         //
     }
@@ -106,14 +89,15 @@ class DoctorController extends Controller
     public function destroy($id)
     {
         //
-         try {
-            $data = Doctor::find($id)->delete();
-            return response()->json([
-                'message' => 'Delete data successfully!',
-                'data' => $data
-            ], 200);
+        try {
+            $data = Rehabilitation::find($id);
+            $data->delete();
+            $data->save();
 
-        } catch(Exception $e) {
+            return response()->json([
+                'message' => 'Delete data success'
+            ], 200);
+        } catch (Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
             ], 500);

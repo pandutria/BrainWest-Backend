@@ -8,6 +8,8 @@ use App\Http\Controllers\DonateTransactionController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTransactionController;
+use App\Http\Controllers\RehabilitationController;
+use App\Http\Controllers\RehabilitationVideoController;
 use App\Http\Controllers\UserController;
 use App\Models\WebinarTransaction;
 use Illuminate\Http\Request;
@@ -17,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::post("/register", [UserController::class, 'register']);
 Route::post("/login", [UserController::class, 'login']);
 
-Route::middleware("auth")->group(function() {
+Route::middleware("auth:sanctum")->group(function() {
     Route::get("/me", [UserController::class, 'me']); // Me
     Route::get("/me/event/transaction", [EventTransactionController::class, 'meTransaction']); // Me Event Transaction
     Route::get("/me/donate/transaction", [DonateTransactionController::class, 'meTransaction']); // Me Donate Transaction
@@ -38,3 +40,13 @@ Route::get('/doctor', [DoctorController::class, 'index']);
 Route::get('/doctor/{id}', [DoctorController::class, 'show']);
 Route::post('/doctor', [DoctorController::class, 'store']);
 Route::delete('/doctor/{id}', [DoctorController::class, 'destroy']);
+
+//Rehabilitation
+Route::get('/rehabilitation', [RehabilitationController::class, 'index']);
+Route::post('rehabilitation', [RehabilitationController::class, 'store']);
+Route::delete('/rehabilitation/{id}', [RehabilitationController::class, 'destroy']);
+
+//Rehabilitation Video
+Route::get('/rehabilitation/video', [RehabilitationVideoController::class, 'index']);
+Route::post('rehabilitation/video', [RehabilitationVideoController::class, 'store']);
+Route::delete('/rehabilitation/video/{id}', [RehabilitationVideoController::class, 'destroy']);

@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Education extends Model
+class Rehabilitation extends Model
 {
+    //
     use HasFactory;
     protected $fillable = [
-        "title",
-        "thumbnail",
-        "desc",
-        "text",
-        "link",
-        "category",
+        'age',
+        'gender',
+        'medical_status',
+        'time_of_diagnosis'
     ];
 }

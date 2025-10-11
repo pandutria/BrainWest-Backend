@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 
 class ConsultationChatHistoriesController extends Controller
 {
-
     public function sendMessage(Request $request) {
         $userId = Auth::user()->id;
         $message = $request->message;
@@ -50,7 +49,11 @@ class ConsultationChatHistoriesController extends Controller
      */
     public function index()
     {
-        //
+        $data = ConsultationChatHistories::with(['doctor'])->get();
+        return response()->json([
+            'message' => 'Get data successfully',
+            'data' => $data
+        ], 200);
     }
 
     /**
