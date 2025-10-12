@@ -48,6 +48,7 @@ Route::delete('/rehabilitation/{id}', [RehabilitationController::class, 'destroy
 
 //Rehabilitation Video
 Route::get('/rehabilitation/video', [RehabilitationVideoController::class, 'index']);
+Route::get('/rehabilitation/video/{id}', [RehabilitationVideoController::class, 'show']);
 Route::post('rehabilitation/video', [RehabilitationVideoController::class, 'store']);
 Route::delete('/rehabilitation/video/{id}', [RehabilitationVideoController::class, 'destroy']);
 Route::post('/rehabilitation/video/by-rehab', [RehabilitationVideoController::class, 'indexByRehabId']);

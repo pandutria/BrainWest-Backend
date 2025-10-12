@@ -21,11 +21,19 @@ class RehabilitationVideoController extends Controller
             $medicalStatus = $request->medical_status;
             $timeOfDiagnosis = $request->time_of_diagnosis;
 
-            $rehab = Rehabilitation::where('age', $age)
-                ->where('gender', $gender)
-                ->where('medical_status', $medicalStatus)
-                ->where('time_of_diagnosis', $timeOfDiagnosis)
-                ->first();
+            //$rehab = Rehabilitation::where('age', $age)
+            //    ->where('gender', $gender)
+            //    ->where('medical_status', $medicalStatus)
+            //    ->where('time_of_diagnosis', $timeOfDiagnosis)
+            //    ->first();
+
+            $rehab = Rehabilitation::where('gender', $gender)->first();
+
+            if (!$rehab) {
+                return response()->json([
+                    'message' => 'Data rehabilitasi tidak ditemukan'
+                ], 404);
+            }
 
             $videos = RehabilitationVideo::where('rehabilitation_id', $rehab->id)->get();
 
@@ -93,9 +101,19 @@ class RehabilitationVideoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(RehabilitationVideo $rehabilitationVideo)
+    public function show($id)
     {
         //
+        try {
+            return response()->json([
+                'message' => 'Get data success',
+                'data' => RehabilitationVideo::find($id)
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
