@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rehabilitation;
+use App\Models\RehabilitationVideo;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -11,6 +12,8 @@ class RehabilitationController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+
     public function index()
     {
         //
@@ -45,7 +48,7 @@ class RehabilitationController extends Controller
             $data->age = $request->age;
             $data->gender = $request->gender;
             $data->medical_status = $request->medical_status;
-            $data->time_of_diagnose = $request->time_of_diagnose;
+            $data->time_of_diagnosis = $request->time_of_diagnosis;
             $data->save();
 
             return response()->json([
@@ -92,7 +95,6 @@ class RehabilitationController extends Controller
         try {
             $data = Rehabilitation::find($id);
             $data->delete();
-            $data->save();
 
             return response()->json([
                 'message' => 'Delete data success'

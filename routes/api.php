@@ -50,3 +50,4 @@ Route::delete('/rehabilitation/{id}', [RehabilitationController::class, 'destroy
 Route::get('/rehabilitation/video', [RehabilitationVideoController::class, 'index']);
 Route::post('rehabilitation/video', [RehabilitationVideoController::class, 'store']);
 Route::delete('/rehabilitation/video/{id}', [RehabilitationVideoController::class, 'destroy']);
+Route::post('/rehabilitation/video/by-rehab', [RehabilitationVideoController::class, 'indexByRehabId']);

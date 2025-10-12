@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rehabilitation;
 use App\Models\RehabilitationVideo;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,6 +12,34 @@ class RehabilitationVideoController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function indexByRehabId(Request $request)
+    {
+        try {
+            $age = $request->age;
+            $gender = $request->gender;
+            $medicalStatus = $request->medical_status;
+            $timeOfDiagnosis = $request->time_of_diagnosis;
+
+            $rehab = Rehabilitation::where('age', $age)
+                ->where('gender', $gender)
+                ->where('medical_status', $medicalStatus)
+                ->where('time_of_diagnosis', $timeOfDiagnosis)
+                ->first();
+
+            $videos = RehabilitationVideo::where('rehabilitation_id', $rehab->id)->get();
+
+            return response()->json([
+                'message' => 'Fetch data success',
+                'data' => $videos
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function index()
     {
         //
@@ -53,7 +82,7 @@ class RehabilitationVideoController extends Controller
             return response()->json([
                 'message' => 'Create data success',
                 'data' => $data
-            ], 500);
+            ], 201);
         } catch(Exception $e) {
             return response()->json([
                 'message' => $e->getMessage()
@@ -94,7 +123,6 @@ class RehabilitationVideoController extends Controller
         try {
             $data = RehabilitationVideo::find($id);
             $data->delete();
-            $data->save();
 
             return response()->json([
                 'message' => 'Delete data success',
