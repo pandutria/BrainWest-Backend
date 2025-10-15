@@ -59,9 +59,9 @@ class DonateTransactionController extends Controller
         try {
             $user = Auth::user();
             $data = new DonateTransaction();
-            
+
             $data->user_id = $user->id;
-            $data->donate_id = $request->donate_id;            
+            $data->donate_id = $request->donate_id;
             $data->total_donate = $request->total_donate;
             $data->save();
 
@@ -73,7 +73,7 @@ class DonateTransactionController extends Controller
             $params = [
                 'transaction_details' => [
                     'order_id' => 'TRX-' . $data->id . '-' . time(),
-                    'gross_amount' => 50000,
+                    'gross_amount' => $request->total_donate,
                 ],
                 'customer_details' => [
                     'first_name' => $user->name,
@@ -81,6 +81,7 @@ class DonateTransactionController extends Controller
                 ],
             ];
 
+            $data = DonateTransaction::with(['user', 'donate'])->find($data->id);
             $snapToken = \Midtrans\Snap::getSnapToken($params);
 
             return response()->json([
