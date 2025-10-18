@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommunityGroupMember;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommunityGroupMemberController extends Controller
 {
@@ -29,6 +31,24 @@ class CommunityGroupMemberController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            $user = Auth::user();
+
+            $data = new CommunityGroupMember();
+            $data->group_id = $request->group_id;
+            $data->user_id = $user->id;
+            $data->save();
+            $data = CommunityGroupMember::with(['group', 'user'])->find($data->id);
+
+            return response()->json([
+                'message' => 'Join community successfully',
+                'data' => $data
+            ], 201);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

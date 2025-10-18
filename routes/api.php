@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommunityGroupController;
+use App\Http\Controllers\CommunityGroupMemberController;
 use App\Http\Controllers\ConsultationChatHistoriesController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DonateController;
@@ -38,6 +39,9 @@ Route::middleware("auth:sanctum")->group(function() {
 
     //Community
     Route::post('/community', [CommunityGroupController::class, 'store']);
+
+    //Community Member
+    Route::post('/community/member', [CommunityGroupMemberController::class, 'store']);
 });
 
 //Doctor
