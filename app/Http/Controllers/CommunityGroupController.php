@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CommunityGroup;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommunityGroupController extends Controller
 {
@@ -15,7 +16,7 @@ class CommunityGroupController extends Controller
     {
         //
         try {
-            $data = CommunityGroup::with('user')->get();
+            $data = CommunityGroup::with('admin')->get();
             return response()->json([
                 'message' => 'Get data successfully',
                 'data' => $data
@@ -41,6 +42,28 @@ class CommunityGroupController extends Controller
     public function store(Request $request)
     {
         //
+        try {
+            $admin = Auth::user();
+
+            $data = new CommunityGroup();
+            $data->name = $request->name;
+            $data->description = $request->description;
+            $data->image_logo = $request->image_logo;
+            $data->image = $request->image;
+            $data->admin_id = $admin->id;
+            $data->save();
+
+            $data = CommunityGroup::with('admin')->find($data->id);
+
+            return response()->json([
+                'message' => 'Create data successfully',
+                'data' => $data
+            ], 201);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -70,8 +93,21 @@ class CommunityGroupController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CommunityGroup $communityGroup)
+    public function destroy($id)
     {
         //
+        try {
+            $data = CommunityGroup::find($id);
+            $data->delete();
+
+            return response()->json([
+                'message' => 'Delete data successfully',
+                'data' => $data
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

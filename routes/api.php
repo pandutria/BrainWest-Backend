@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommunityGroupController;
 use App\Http\Controllers\ConsultationChatHistoriesController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DonateController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\EventTransactionController;
 use App\Http\Controllers\RehabilitationController;
 use App\Http\Controllers\RehabilitationVideoController;
 use App\Http\Controllers\UserController;
+use App\Models\CommunityGroup;
 use App\Models\WebinarTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +35,9 @@ Route::middleware("auth:sanctum")->group(function() {
     //Consultation
     Route::post('/consultation', [ConsultationChatHistoriesController::class, 'sendMessage']);
     Route::get('/consultation/history', [ConsultationChatHistoriesController::class, 'getHistory']);
+
+    //Community
+    Route::post('/community', [CommunityGroupController::class, 'store']);
 });
 
 //Doctor
@@ -51,4 +56,10 @@ Route::get('/rehabilitation/video', [RehabilitationVideoController::class, 'inde
 Route::get('/rehabilitation/video/{id}', [RehabilitationVideoController::class, 'show']);
 Route::post('rehabilitation/video', [RehabilitationVideoController::class, 'store']);
 Route::delete('/rehabilitation/video/{id}', [RehabilitationVideoController::class, 'destroy']);
+Route::post('/rehabilitation/video/by-rehab', [RehabilitationVideoController::class, 'indexByRehabId']);
+
+//Community
+Route::get('/community', [CommunityGroupController::class, 'index']);
+Route::get('/rehabilitation/video/{id}', [RehabilitationVideoController::class, 'show']);
+Route::delete('/community/{id}', [CommunityGroupController::class, 'destroy']);
 Route::post('/rehabilitation/video/by-rehab', [RehabilitationVideoController::class, 'indexByRehabId']);
