@@ -53,4 +53,25 @@ class User extends Authenticatable
     {
         return $this->hasMany(EventTransaction::class, 'user_id');
     }
+
+    public function communities() {
+        return $this->hasMany(CommunityGroup::class, 'admin_id');
+    }
+
+    public function joinedCommunities()
+    {
+        return $this->belongsToMany(CommunityGroup::class, 'community_group_members', 'user_id', 'group_id')
+                ->withTimestamps();
+    }
+
+    public function groupMemberships()
+    {
+        return $this->hasMany(CommunityGroupMember::class, 'user_id');
+    }
+
+    public function sentMessages()
+    {
+        return $this->hasMany(CommunityGroupMessage::class, 'sender_id');
+    }
+
 }
