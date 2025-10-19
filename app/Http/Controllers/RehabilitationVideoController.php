@@ -71,6 +71,20 @@ class RehabilitationVideoController extends Controller
         //
     }
 
+    public function showByRehabid($rehabId) {
+        try {
+            $data = RehabilitationVideo::where('rehabilitation_id', $rehabId)->get();
+            return response()->json([
+                'message' => 'get data successfully',
+                'data' => $data
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */

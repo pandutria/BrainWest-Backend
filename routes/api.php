@@ -3,6 +3,7 @@
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommunityGroupController;
 use App\Http\Controllers\CommunityGroupMemberController;
+use App\Http\Controllers\CommunityGroupMessageController;
 use App\Http\Controllers\ConsultationChatHistoriesController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\DonateController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\RehabilitationController;
 use App\Http\Controllers\RehabilitationVideoController;
 use App\Http\Controllers\UserController;
 use App\Models\CommunityGroup;
+use App\Models\CommunityGroupMessage;
 use App\Models\WebinarTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,6 +44,13 @@ Route::middleware("auth:sanctum")->group(function() {
 
     //Community Member
     Route::post('/community/member', [CommunityGroupMemberController::class, 'store']);
+
+    //Community Message
+    Route::post('/community/message', [CommunityGroupMessageController::class, 'sendMessage']);
+    Route::get('/community/message/history', [CommunityGroupMessageController::class, 'getHistory']);
+
+
+
 });
 
 //Doctor
@@ -54,6 +63,7 @@ Route::delete('/doctor/{id}', [DoctorController::class, 'destroy']);
 Route::get('/rehabilitation', [RehabilitationController::class, 'index']);
 Route::post('rehabilitation', [RehabilitationController::class, 'store']);
 Route::delete('/rehabilitation/{id}', [RehabilitationController::class, 'destroy']);
+Route::get('/rehabilitation/video/by-rehab/{id}', [RehabilitationVideoController::class, 'showByRehabid']);
 
 //Rehabilitation Video
 Route::get('/rehabilitation/video', [RehabilitationVideoController::class, 'index']);
@@ -64,6 +74,6 @@ Route::post('/rehabilitation/video/by-rehab', [RehabilitationVideoController::cl
 
 //Community
 Route::get('/community', [CommunityGroupController::class, 'index']);
-Route::get('/rehabilitation/video/{id}', [RehabilitationVideoController::class, 'show']);
+Route::get('/community/{id}', [CommunityGroupController::class, 'show']);
 Route::delete('/community/{id}', [CommunityGroupController::class, 'destroy']);
 Route::post('/rehabilitation/video/by-rehab', [RehabilitationVideoController::class, 'indexByRehabId']);

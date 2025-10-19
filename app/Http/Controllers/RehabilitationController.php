@@ -65,9 +65,19 @@ class RehabilitationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Rehabilitation $rehabilitation)
+    public function show($id)
     {
         //
+        try {
+            return response()->json([
+                'message' => 'Get data success',
+                'data' => Rehabilitation::find($id)
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

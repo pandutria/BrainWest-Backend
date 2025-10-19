@@ -3,13 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommunityGroupMessage;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommunityGroupMessageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    public function sendMessage(Request $request) {
+        try {
+            $userId = Auth::user()->id;
+            $message = $request->message;
+            $groupId = $request->group_id;
+
+            $data = CommunityGroupMessage::updateOrCreate([
+                'sender_id' => $userId,
+                'group_id' => $groupId,
+                'message' => $message
+            ]);
+
+            $data = CommunityGroupMessage::with(['group.admin', 'sender'])->find($data->id);
+
+            return response()->json([
+                'message' => 'Post message success',
+                'data' => $data
+            ], 201);
+
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getHistory() {
+        try {
+            $userId = Auth::user()->id;
+            $histories = CommunityGroupMessage::with(['group.admin', 'sender'])
+                    ->where('sender_id', $userId)
+                    ->get();
+
+            return response()->json([
+                'message' => 'Chat history retrieved!',
+                'data' => $histories
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function index()
     {
         //

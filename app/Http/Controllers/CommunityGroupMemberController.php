@@ -54,9 +54,20 @@ class CommunityGroupMemberController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CommunityGroupMember $communityGroupMember)
+    public function show($id)
     {
         //
+        try {
+            $data = CommunityGroupMember::find($id);
+            return response()->json([
+                'message' => 'Get data successfully',
+                'data' => $data
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

@@ -69,9 +69,20 @@ class CommunityGroupController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(CommunityGroup $communityGroup)
+    public function show($id)
     {
         //
+        try {
+            $data = CommunityGroup::with('admin')->find($id);
+            return response()->json([
+                'message' => 'Get data successfully',
+                'data' => $data
+            ], 200);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
