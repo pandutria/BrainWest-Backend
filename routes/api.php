@@ -48,9 +48,6 @@ Route::middleware("auth:sanctum")->group(function() {
     //Community Message
     Route::post('/community/message', [CommunityGroupMessageController::class, 'sendMessage']);
     Route::get('/community/message/history', [CommunityGroupMessageController::class, 'getHistory']);
-
-
-
 });
 
 //Doctor
