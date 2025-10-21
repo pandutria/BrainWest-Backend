@@ -11,6 +11,7 @@ use App\Http\Controllers\DonateTransactionController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTransactionController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RehabilitationController;
 use App\Http\Controllers\RehabilitationVideoController;
 use App\Http\Controllers\UserController;
@@ -74,3 +75,7 @@ Route::get('/community', [CommunityGroupController::class, 'index']);
 Route::get('/community/{id}', [CommunityGroupController::class, 'show']);
 Route::delete('/community/{id}', [CommunityGroupController::class, 'destroy']);
 Route::post('/rehabilitation/video/by-rehab', [RehabilitationVideoController::class, 'indexByRehabId']);
+
+//Product
+Route::get('/product', [ProductController::class, 'index']);
+Route::post('/product', [ProductController::class, 'store']);
