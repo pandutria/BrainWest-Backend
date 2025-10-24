@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProductTransactionDetail;
+use Exception;
 use Illuminate\Http\Request;
 
 class ProductTransactionDetailController extends Controller
@@ -13,6 +14,22 @@ class ProductTransactionDetailController extends Controller
     public function index()
     {
         //
+        try {
+            return response()->json([
+                'message' => 'Get data succesfully',
+                'data' => ProductTransactionDetail::all()
+            ], 200);
+        } catch(Exception $e) {
+            response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function indexByDetail() {
+        try {
+            
+        }
     }
 
     /**
@@ -28,7 +45,22 @@ class ProductTransactionDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $data = new ProductTransactionDetail();
+            $data->product_id = $request->product_id;
+            $data->product_transaction_header_id = $request->product_transaction_header_id;
+            $data->qty = $request->qty;
+            $data->save();
+
+            return response()->json([
+                'message' => 'Create data successfully',
+                'data' => $data->with(['product', 'detail.user'])->find($data->id)
+            ], 201);
+        } catch(Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

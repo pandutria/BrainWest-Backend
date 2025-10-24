@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('product_transaction_headers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('buyer_id')->constrained('user')->onDelete('cascade');
-            $table->bigInteger('subTotal');
+            $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
+            $table->bigInteger('total');
+            $table->string('address');
             $table->timestamps();
         });
     }

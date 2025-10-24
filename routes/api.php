@@ -12,6 +12,8 @@ use App\Http\Controllers\EducationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventTransactionController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTransactionDetailController;
+use App\Http\Controllers\ProductTransactionHeaderController;
 use App\Http\Controllers\RehabilitationController;
 use App\Http\Controllers\RehabilitationVideoController;
 use App\Http\Controllers\UserController;
@@ -49,6 +51,9 @@ Route::middleware("auth:sanctum")->group(function() {
     //Community Message
     Route::post('/community/message', [CommunityGroupMessageController::class, 'sendMessage']);
     Route::get('/community/message/history', [CommunityGroupMessageController::class, 'getHistory']);
+
+    //Transaction Hader
+    Route::post('/product/transaction', [ProductTransactionHeaderController::class, 'store']);
 });
 
 //Doctor
@@ -78,4 +83,13 @@ Route::post('/rehabilitation/video/by-rehab', [RehabilitationVideoController::cl
 
 //Product
 Route::get('/product', [ProductController::class, 'index']);
+Route::get('/product/{id}', [ProductController::class, 'show']);
 Route::post('/product', [ProductController::class, 'store']);
+
+
+//Transaction Hader
+Route::get('/product/transaction', [ProductTransactionHeaderController::class, 'index']);
+
+//Transaction Detail
+Route::get('/product/transaction/detail', [ProductTransactionDetailController::class, 'index']);
+Route::post('/product/transaction/detail', [ProductTransactionDetailController::class, 'store']);
