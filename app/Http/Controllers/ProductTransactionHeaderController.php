@@ -29,10 +29,10 @@ class ProductTransactionHeaderController extends Controller
     public function indexByUser() {
         try {
             $buyer_id = Auth::user()->id;
-            $data = ProductTransactionHeader::where('buyer_id', $buyer_id);
+            $data = ProductTransactionHeader::with('user')->where('buyer_id', $buyer_id);
             return response()->json([
                 'message' => 'Get data successfully',
-                'data' => $data
+                'data' => $data->get()
             ], 201);
         } catch(Exception $e) {
             return response()->json([
@@ -64,11 +64,31 @@ class ProductTransactionHeaderController extends Controller
             $data->address = $request->address;
             $data->save();
 
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
+            \Midtrans\Config::$isProduction = config('midtrans.is_production');
+            \Midtrans\Config::$isSanitized = config('midtrans.is_sanitized');
+            \Midtrans\Config::$is3ds = config('midtrans.is_3ds');
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => 'TRX-' . $data->id . '-' . time(),
+                    'gross_amount' => $request->total,
+                ],
+                'customer_details' => [
+                    'first_name' => $user->name,
+                    'email' => $user->email,
+                ],
+            ];
+
             $data = ProductTransactionHeader::with('user')->find($data->id);
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
 
             return response()->json([
                 'message' => 'Create data successfully',
-                'data' => $data
+                'data' => [
+                    'transaction_header' => $data,
+                    'snap_token' => $snapToken
+                ]
             ], 201);
         } catch(Exception $e) {
             return response()->json([
@@ -104,8 +124,19 @@ class ProductTransactionHeaderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductTransactionHeader $productTransactionHeader)
+    public function destroy($id)
     {
         //
+        try {
+            $data = ProductTransactionHeader::find($id);
+            $data->delete();
+
+            return response()->json([
+                'message' => 'Delete data successfully',
+                'data' => $data
+            ], 200);
+        } catch(Exception $e) {
+
+        }
     }
 }

@@ -54,6 +54,7 @@ Route::middleware("auth:sanctum")->group(function() {
 
     //Transaction Hader
     Route::post('/product/transaction', [ProductTransactionHeaderController::class, 'store']);
+    Route::get('/product/transaction/by-user', [ProductTransactionHeaderController::class, 'indexByUser']);
 });
 
 //Doctor
@@ -89,7 +90,10 @@ Route::post('/product', [ProductController::class, 'store']);
 
 //Transaction Hader
 Route::get('/product/transaction', [ProductTransactionHeaderController::class, 'index']);
+Route::delete('/product/transaction/{id}', [ProductTransactionHeaderController::class, 'destroy']);
 
 //Transaction Detail
 Route::get('/product/transaction/detail', [ProductTransactionDetailController::class, 'index']);
 Route::post('/product/transaction/detail', [ProductTransactionDetailController::class, 'store']);
+Route::delete('/product/transaction/detail/{id}', [ProductTransactionDetailController::class, 'destroy']);
+Route::get('/product/transaction/detail/by-header/{headerid}', [ProductTransactionDetailController::class, 'indexByHeader']);

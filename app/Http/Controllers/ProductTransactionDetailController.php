@@ -17,7 +17,7 @@ class ProductTransactionDetailController extends Controller
         try {
             return response()->json([
                 'message' => 'Get data succesfully',
-                'data' => ProductTransactionDetail::all()
+                'data' => ProductTransactionDetail::with(['product', 'detail'])->get()
             ], 200);
         } catch(Exception $e) {
             response()->json([
@@ -26,9 +26,15 @@ class ProductTransactionDetailController extends Controller
         }
     }
 
-    public function indexByDetail() {
+    public function indexByHeader($headerId) {
         try {
-            
+            $data = ProductTransactionDetail::where('product_transaction_header_id', $headerId);
+            return response()->json([
+                'message' => 'Get data successfully',
+                'data' => $data->with(['product', 'detail'])->get()
+            ]);
+        } catch(Exception $e) {
+
         }
     }
 
@@ -90,8 +96,19 @@ class ProductTransactionDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductTransactionDetail $productTransactionDetail)
+    public function destroy($id)
     {
         //
+        try {
+            $data = ProductTransactionDetail::find($id);
+            $data->delete();
+
+            return response()->json([
+                'message' => 'Delete data successfully',
+                'data' => $data
+            ], 200);
+        } catch(Exception $e) {
+            
+        }
     }
 }
