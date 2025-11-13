@@ -39,23 +39,34 @@ class CommunityGroupMessageController extends Controller
         }
     }
 
-    public function getHistory() {
-        try {
-            $userId = Auth::user()->id;
-            $histories = CommunityGroupMessage::with(['group.admin', 'sender'])
-                    ->where('sender_id', $userId)
-                    ->get();
+public function getHistory() {
+    try {
+        $userId = Auth::user()->id;
 
-            return response()->json([
-                'message' => 'Chat history retrieved!',
-                'data' => $histories
-            ], 200);
-        } catch(Exception $e) {
-            return response()->json([
-                'message' => $e->getMessage()
-            ], 500);
-        }
+        $histories = CommunityGroupMessage::with(['group.admin', 'sender'])
+            ->where('sender_id', $userId)
+            ->get();
+
+        // Tambahkan default message jika kosong
+        $histories = $histories->map(function($history) {
+            if (!$history->message) {
+                $history->message = "Belum ada pesan";
+            }
+            return $history;
+        });
+
+        return response()->json([
+            'message' => 'Chat history retrieved!',
+            'data' => $histories
+        ], 200);
+
+    } catch (Exception $e) {
+        return response()->json([
+            'message' => $e->getMessage()
+        ], 500);
     }
+}
+
 
     public function index()
     {

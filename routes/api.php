@@ -44,6 +44,7 @@ Route::middleware("auth:sanctum")->group(function() {
 
     //Community
     Route::post('/community', [CommunityGroupController::class, 'store']);
+    Route::get('/community/history', [CommunityGroupMemberController::class, 'getHistoryCommunity']);
 
     //Community Member
     Route::post('/community/member', [CommunityGroupMemberController::class, 'store']);

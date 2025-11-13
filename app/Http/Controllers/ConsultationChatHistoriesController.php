@@ -32,17 +32,27 @@ class ConsultationChatHistoriesController extends Controller
     }
 
     public function getHistory() {
-        $userId = Auth::user()->id;
-        $histories = ConsultationChatHistories::with('doctor.user')
-                    ->where('user_id', $userId)
-                    ->orderBy('last_message_at', 'desc')
-                    ->get();
+    $userId = Auth::user()->id;
 
-        return response()->json([
-            'message' => 'Chat history retrieved!',
-            'data' => $histories
-        ], 200);
-    }
+    // Ambil semua consultation chat untuk user ini
+    $histories = ConsultationChatHistories::with('doctor.user')
+        ->where('user_id', $userId)
+        ->get();
+
+    // Map untuk menambahkan default message jika last_message null
+    $histories = $histories->map(function($history) {
+        if (!$history->last_message) {
+            $history->last_message = "Belum ada pesan";
+        }
+        return $history;
+    });
+
+    return response()->json([
+        'message' => 'Chat history retrieved!',
+        'data' => $histories
+    ], 200);    
+}
+
 
     /**
      * Display a listing of the resource.
